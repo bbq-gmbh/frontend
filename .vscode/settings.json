@@ -1,3 +1,6 @@
 {
-
+    "[javascript][typescript][javascriptreact][typescriptreact]": {
+        "editor.detectIndentation": false,
+        "editor.tabSize": 2
+    }
 }
