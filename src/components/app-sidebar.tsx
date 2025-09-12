@@ -86,7 +86,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-sidebar-border h-16 border-b">
-        <NavUser user={{ name: "Habicht Habicht", avatar: "HH" }} />
+        <NavUser user={{ name: "Eric Cartman", avatar: "EC" }} />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
