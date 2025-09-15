@@ -27,22 +27,22 @@ import Link from "next/link";
 const itemsStart = [
   {
     title: "Start",
-    url: "/",
+    url: "/app",
     icon: House,
   },
   {
     title: "Zeitbuchung",
-    url: "time-booking",
+    url: "/app/time-booking",
     icon: Clock,
   },
   {
     title: "Posteingang",
-    url: "inbox",
+    url: "/app/inbox",
     icon: Inbox,
   },
   {
     title: "Mitarbeiter",
-    url: "employees",
+    url: "/app/employees",
     icon: UserRoundSearch,
   },
 ];
@@ -50,7 +50,7 @@ const itemsStart = [
 const itemsAdmin = [
   {
     title: "Benutzer",
-    url: "users",
+    url: "/app/users",
     icon: Users,
   },
 ];
@@ -58,7 +58,7 @@ const itemsAdmin = [
 const itemsEnd = [
   {
     title: "Einstellungen",
-    url: "settings",
+    url: "/app/settings",
     icon: Settings,
   },
 ];
