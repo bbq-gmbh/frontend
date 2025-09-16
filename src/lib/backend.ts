@@ -12,7 +12,7 @@ export function api(path: string): string {
     })
   );
 
-  sdk.createUserUsersPost({
+  sdk.createUser({
     body: {
       username: "abcd",
       password: "pswd",
@@ -21,7 +21,7 @@ export function api(path: string): string {
 
   const token = "";
 
-  sdk.refreshTokenAuthRefreshPost({
+  sdk.refreshAccessToken({
     headers: {
       Authorization: `Bearer ${token}`,
     },
