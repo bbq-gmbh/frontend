@@ -123,154 +123,154 @@ export type ValidationError = {
     type: string;
 };
 
-export type ListUsersUsersGetData = {
+export type ListUsersData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/users/';
 };
 
-export type ListUsersUsersGetResponses = {
+export type ListUsersResponses = {
     /**
-     * Response List Users Users  Get
+     * Response Listusers
      * Successful Response
      */
     200: Array<UserRead>;
 };
 
-export type ListUsersUsersGetResponse = ListUsersUsersGetResponses[keyof ListUsersUsersGetResponses];
+export type ListUsersResponse = ListUsersResponses[keyof ListUsersResponses];
 
-export type CreateUserUsersPostData = {
+export type CreateUserData = {
     body: UserCreate;
     path?: never;
     query?: never;
     url: '/users/';
 };
 
-export type CreateUserUsersPostErrors = {
+export type CreateUserErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type CreateUserUsersPostError = CreateUserUsersPostErrors[keyof CreateUserUsersPostErrors];
+export type CreateUserError = CreateUserErrors[keyof CreateUserErrors];
 
-export type CreateUserUsersPostResponses = {
+export type CreateUserResponses = {
     /**
      * Successful Response
      */
     201: UserRead;
 };
 
-export type CreateUserUsersPostResponse = CreateUserUsersPostResponses[keyof CreateUserUsersPostResponses];
+export type CreateUserResponse = CreateUserResponses[keyof CreateUserResponses];
 
-export type RegisterAuthRegisterPostData = {
+export type RegisterUserData = {
     body: UserCreate;
     path?: never;
     query?: never;
     url: '/auth/register';
 };
 
-export type RegisterAuthRegisterPostErrors = {
+export type RegisterUserErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type RegisterAuthRegisterPostError = RegisterAuthRegisterPostErrors[keyof RegisterAuthRegisterPostErrors];
+export type RegisterUserError = RegisterUserErrors[keyof RegisterUserErrors];
 
-export type RegisterAuthRegisterPostResponses = {
+export type RegisterUserResponses = {
     /**
      * Successful Response
      */
     200: TokenPair;
 };
 
-export type RegisterAuthRegisterPostResponse = RegisterAuthRegisterPostResponses[keyof RegisterAuthRegisterPostResponses];
+export type RegisterUserResponse = RegisterUserResponses[keyof RegisterUserResponses];
 
-export type LoginAuthLoginPostData = {
+export type LoginUserData = {
     body: LoginRequest;
     path?: never;
     query?: never;
     url: '/auth/login';
 };
 
-export type LoginAuthLoginPostErrors = {
+export type LoginUserErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type LoginAuthLoginPostError = LoginAuthLoginPostErrors[keyof LoginAuthLoginPostErrors];
+export type LoginUserError = LoginUserErrors[keyof LoginUserErrors];
 
-export type LoginAuthLoginPostResponses = {
+export type LoginUserResponses = {
     /**
      * Successful Response
      */
     200: TokenPair;
 };
 
-export type LoginAuthLoginPostResponse = LoginAuthLoginPostResponses[keyof LoginAuthLoginPostResponses];
+export type LoginUserResponse = LoginUserResponses[keyof LoginUserResponses];
 
-export type LogoutAllAuthLogoutAllPostData = {
+export type LogoutAllSessionsData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/auth/logout-all';
 };
 
-export type LogoutAllAuthLogoutAllPostResponses = {
+export type LogoutAllSessionsResponses = {
     /**
      * Successful Response
      */
     204: void;
 };
 
-export type LogoutAllAuthLogoutAllPostResponse = LogoutAllAuthLogoutAllPostResponses[keyof LogoutAllAuthLogoutAllPostResponses];
+export type LogoutAllSessionsResponse = LogoutAllSessionsResponses[keyof LogoutAllSessionsResponses];
 
-export type RefreshTokenAuthRefreshPostData = {
+export type RefreshAccessTokenData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/auth/refresh';
 };
 
-export type RefreshTokenAuthRefreshPostResponses = {
+export type RefreshAccessTokenResponses = {
     /**
      * Successful Response
      */
     200: Token;
 };
 
-export type RefreshTokenAuthRefreshPostResponse = RefreshTokenAuthRefreshPostResponses[keyof RefreshTokenAuthRefreshPostResponses];
+export type RefreshAccessTokenResponse = RefreshAccessTokenResponses[keyof RefreshAccessTokenResponses];
 
-export type ChangePasswordAuthChangePasswordPostData = {
+export type ChangePasswordData = {
     body: PasswordChangeRequest;
     path?: never;
     query?: never;
     url: '/auth/change-password';
 };
 
-export type ChangePasswordAuthChangePasswordPostErrors = {
+export type ChangePasswordErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type ChangePasswordAuthChangePasswordPostError = ChangePasswordAuthChangePasswordPostErrors[keyof ChangePasswordAuthChangePasswordPostErrors];
+export type ChangePasswordError = ChangePasswordErrors[keyof ChangePasswordErrors];
 
-export type ChangePasswordAuthChangePasswordPostResponses = {
+export type ChangePasswordResponses = {
     /**
      * Successful Response
      */
     204: void;
 };
 
-export type ChangePasswordAuthChangePasswordPostResponse = ChangePasswordAuthChangePasswordPostResponses[keyof ChangePasswordAuthChangePasswordPostResponses];
+export type ChangePasswordResponse = ChangePasswordResponses[keyof ChangePasswordResponses];
 
 export type ReadRootGetData = {
     body?: never;
