@@ -6,10 +6,6 @@ export function middleware(request: NextRequest) {
   const { nextUrl, cookies } = request;
   const pathname = nextUrl.pathname;
 
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/app", request.url));
-  }
-
   const refreshToken = cookies.get(REFRESH_TOKEN_COOKIE)?.value;
 
   if (!refreshToken) {
