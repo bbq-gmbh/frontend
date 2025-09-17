@@ -1,6 +1,15 @@
 "use server";
 
-import { loginSchema } from "@/lib/schemas/auth";
+import { z } from "zod";
+
+export const loginSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(1, "Username is required")
+    .regex(/^[^\s]+$/, "No spaces allowed"),
+  password: z.string().min(1, "Password is required"),
+});
 
 export type LoginFormState = {
   errors?: { form?: string[] };
@@ -17,12 +26,12 @@ export async function login(
     password: form.get("password"),
   });
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   if (!r.success) {
     // Collapse all validation issues into a single form-level list.
     return {
-      errors: { form: r.error.issues.map(i => i.message) },
+      errors: { form: r.error.issues.map((i) => i.message) },
       values: { username: (form.get("username") as string) || "" },
     };
   }
