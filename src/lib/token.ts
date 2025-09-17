@@ -20,7 +20,3 @@ export async function decrypt(token: string): Promise<JWTPayload | undefined> {
     console.log("Failed to verify session");
   }
 }
-
-export async function createSession(userId: string) {
-  
-}
