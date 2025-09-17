@@ -1,32 +1,6 @@
-import * as sdk from "@/backend/sdk.gen";
-import * as types from "@/backend/types.gen";
-import { client } from "@/backend/client.gen";
-import { createConfig } from "@/backend/client";
-
 const backendUri = process.env.BACKEND;
 
 export function api(path: string): string {
-  client.setConfig(
-    createConfig({
-      baseUrl: "http://localhost:3001",
-    })
-  );
-
-  sdk.createUser({
-    body: {
-      username: "abcd",
-      password: "pswd",
-    },
-  });
-
-  const token = "";
-
-  sdk.refreshAccessToken({
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
   if (backendUri === undefined)
     throw Error("Backend uri not defined in environment");
 
