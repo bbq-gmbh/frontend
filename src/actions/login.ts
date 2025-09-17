@@ -3,7 +3,7 @@
 import { z } from "zod";
 
 import * as sdk from "@/backend/sdk.gen";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 
 const loginSchema = z.object({
   username: z
@@ -24,6 +24,7 @@ export type LoginFormState = {
 };
 
 export async function login(
+  redirectPath: string | undefined,
   _: LoginFormState | undefined,
   form: FormData
 ): Promise<LoginFormState> {
@@ -50,7 +51,7 @@ export async function login(
     };
   }
 
-  redirect("/app/users");
+  redirect(redirectPath ?? "/app");
 
-  return { success: true };
+  // return { success: true };
 }

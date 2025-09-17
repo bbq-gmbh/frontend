@@ -20,9 +20,13 @@ import { toast } from "sonner";
 
 export function LoginForm({
   className,
+  redirectPath,
   ...props
-}: React.ComponentProps<"div">) {
-  const [state, loginAction, pending] = useActionState(login, undefined);
+}: React.ComponentProps<"div"> & { redirectPath?: string }) {
+  const [state, loginAction, pending] = useActionState(
+    login.bind(null, redirectPath),
+    undefined
+  );
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
