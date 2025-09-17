@@ -6,6 +6,10 @@ export function middleware(request: NextRequest) {
   const { nextUrl, cookies } = request;
   const pathname = nextUrl.pathname;
 
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/app", request.url));
+  }
+
   const refreshToken = cookies.get(REFRESH_TOKEN_COOKIE)?.value;
 
   if (!refreshToken) {
@@ -19,5 +23,5 @@ export function middleware(request: NextRequest) {
 
 // Only protect /app/* routes
 export const config = {
-  matcher: "/app/:path*",
+  matcher: ["/", "/app/:path*"],
 };
