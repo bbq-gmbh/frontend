@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -15,13 +15,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { login } from "@/actions/login";
+import { login, type LoginFormState } from "@/actions/login";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [state, loginAction, pending] = useActionState(login, undefined);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (state?.errors?.form && state.errors.form.length > 0) {
+      toast.error("Login failed", {
+        richColors: true,
+        description: (
+          <>
+            {state.errors.form.map((error, index, a) => (
+              <span key={index}>
+                {error}
+                {index + 1 < a.length && <br />}
+              </span>
+            ))}
+          </>
+        ),
+      });
+    }
+  }, [state]);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -34,14 +56,29 @@ export function LoginForm({
           <form action={loginAction}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
-                <Label htmlFor="email">Username</Label>
-                <Input id="email" type="text" placeholder="" required />
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  type="text"
+                  placeholder=""
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Passwort</Label>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="flex flex-col gap-3">
                 <Button disabled={pending} type="submit" className="w-full">
