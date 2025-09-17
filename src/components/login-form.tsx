@@ -1,4 +1,7 @@
+import { useActionState } from "react";
+
 import { cn } from "@/lib/utils";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,30 +13,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { login } from "@/actions/login";
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [state, loginAction, pending] = useActionState(login, undefined);
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
           <CardTitle>In Account einloggen</CardTitle>
-          <CardDescription>
-            Gebe den Username und Passwort ein
-          </CardDescription>
+          <CardDescription>Gebe den Username und Passwort ein</CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={loginAction}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Username</Label>
-                <Input
-                  id="email"
-                  type="text"
-                  placeholder=""
-                  required
-                />
+                <Input id="email" type="text" placeholder="" required />
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
@@ -42,7 +42,7 @@ export function LoginForm({
                 <Input id="password" type="password" required />
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
+                <Button disabled={pending} type="submit" className="w-full">
                   Login
                 </Button>
               </div>
