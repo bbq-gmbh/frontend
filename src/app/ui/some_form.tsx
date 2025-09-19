@@ -11,8 +11,8 @@ export function CreateUserForm() {
     <>
       <form action={action} className="max-w-100 space-y-2 my-4">
         <div className="grid grid-cols-2">
-          <label htmlFor="name">Name</label>
-          <input id="name" name="name" placeholder="Name" />
+          <label htmlFor="username">Name</label>
+          <input id="username" name="username" placeholder="Name" />
         </div>
         <div className="grid grid-cols-2">
           <label htmlFor="password">Password</label>

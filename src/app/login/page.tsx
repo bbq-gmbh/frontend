@@ -1,9 +1,11 @@
 "use client";
 
-import { LoginForm } from "@/components/login-form";
 import { useSearchParams } from "next/navigation";
 
-export default function Page() {
+import { LoginForm } from "@/components/login-form";
+import { Suspense } from "react";
+
+export function LoginPage() {
   const searchParams = useSearchParams();
 
   return (
@@ -12,5 +14,13 @@ export default function Page() {
         <LoginForm redirectPath={searchParams.get("redirect") ?? undefined} />
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <LoginPage />
+    </Suspense>
   );
 }

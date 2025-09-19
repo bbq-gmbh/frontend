@@ -1,8 +1,8 @@
 "use server";
 
-import { api } from "@/lib/backend";
+import { z } from "zod";
 
-import { jwtVerify } from "jose";
+import * as sdk from "@/backend/sdk.gen";
 
 export type FormState =
   | {
@@ -11,43 +11,54 @@ export type FormState =
     }
   | undefined;
 
+const loginSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(1, "Username is required")
+    .min(4, "Username must contain at least 4 characters")
+    .regex(/^[^\s]+$/, "Username cannot contain spaces"),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(8, "Password must contain at least 8 characters"),
+});
+
 export async function createUser(
   state: FormState,
-  formData: FormData
+  form: FormData
 ): Promise<FormState> {
   //await new Promise((resolve) => setTimeout(resolve, 100));
 
-  const fields = {
-    username: formData.get("name"),
-    password_hash: formData.get("password"),
-  };
-
-  const body = JSON.stringify(fields);
-
-  console.log(body);
-
-  const req = await fetch(api("users"), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: body,
+  const r = loginSchema.safeParse({
+    username: form.get("username"),
+    password: form.get("password"),
   });
 
-  console.log(req);
+  if (!r.success) {
+    return {
+      message: r.error.issues[0].message,
+      error: true,
+    };
+  }
+
+  const apiRes = await sdk.createUser({
+    body: r.data,
+  });
 
   //await new Promise((resolve) => setTimeout(resolve, 300));
 
-  if (req.ok) {
-    const res = await req.json();
+  if (apiRes.error) {
     return {
-      message: `${JSON.stringify(res)}`,
-      error: false,
+      error: true,
+      message: `Failed to create user: ${
+        apiRes.error.detail?.toString() ?? "Unknown error"
+      }`,
     };
   }
 
   return {
-    message: `${req.status} | ${req.statusText}`,
-    error: true,
+    error: false,
+    message: `Success! Created user "${apiRes.data.username}" (${apiRes.data.id})`,
   };
 }

@@ -2,8 +2,10 @@
 
 import { z } from "zod";
 
-import * as sdk from "@/backend/sdk.gen";
+import { cookies } from "next/headers";
 import { redirect, RedirectType } from "next/navigation";
+
+import * as sdk from "@/backend/sdk.gen";
 
 const loginSchema = z.object({
   username: z
@@ -33,8 +35,6 @@ export async function login(
     password: form.get("password"),
   });
 
-  //await new Promise((resolve) => setTimeout(resolve, 300));
-
   if (!r.success) {
     return {
       errors: { form: r.error.issues.map((i) => i.message) },
@@ -51,7 +51,31 @@ export async function login(
     };
   }
 
-  redirect(redirectPath ?? "/app");
+  const apiRes = await sdk.loginUser({
+    body: r.data,
+  });
+
+  if (apiRes.error) {
+    return {
+      errors: {
+        form: [apiRes.error.detail?.toString() ?? "Unknown backend error"],
+      },
+    };
+  }
+
+  const cookieStore = await cookies();
+  cookieStore.set("access_token", apiRes.data.access_token, {
+    httpOnly: true,
+    secure: true,
+    expires: new Date(Date.now() + 1 * 30 * 1000),
+  });
+  cookieStore.set("refresh_token", apiRes.data.refresh_token, {
+    httpOnly: true,
+    secure: true,
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  });
+
+  redirect(redirectPath ?? "/app", RedirectType.replace);
 
   // return { success: true };
 }

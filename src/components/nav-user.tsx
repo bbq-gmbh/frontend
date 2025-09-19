@@ -81,13 +81,13 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link href="account">
+                <Link href="/app/account">
                   <User />
                   Account
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="logout">
+                <Link href="/logout">
                   <LogOut />
                   Log out
                 </Link>
