@@ -68,11 +68,15 @@ export async function login(
     httpOnly: true,
     secure: true,
     expires: new Date(Date.now() + 1 * 30 * 1000),
+    sameSite: "lax",
+    path: "/",
   });
   cookieStore.set("refresh_token", apiRes.data.refresh_token, {
     httpOnly: true,
     secure: true,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    sameSite: "lax",
+    path: "/",
   });
 
   redirect(redirectPath ?? "/app", RedirectType.replace);

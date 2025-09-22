@@ -78,6 +78,8 @@ export async function middleware(request: NextRequest) {
           httpOnly: true,
           secure: true,
           expires: new Date(Date.now() + 1 * 30 * 1000),
+          sameSite: "lax",
+          path: "/",
         });
         return response;
       }
