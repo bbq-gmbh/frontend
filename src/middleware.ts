@@ -8,16 +8,6 @@ const tokenSecret = process.env.TOKEN_SECRET!;
 const encodedTokenSecret = new TextEncoder().encode(tokenSecret);
 const tokenAlgorithm = process.env.TOKEN_ALGORITHM!;
 
-// function addNoStoreHeaders(res: NextResponse) {
-//   res.headers.set(
-//     "Cache-Control",
-//     "no-store, no-cache, must-revalidate, proxy-revalidate"
-//   );
-//   res.headers.set("Pragma", "no-cache");
-//   res.headers.set("Expires", "0");
-//   return res;
-// }
-
 export async function middleware(request: NextRequest) {
   const { nextUrl, cookies } = request;
   const pathname = nextUrl.pathname;
