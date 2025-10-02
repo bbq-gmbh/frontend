@@ -63,6 +63,8 @@ export async function middleware(request: NextRequest) {
       });
 
       if (apiRes.data) {
+        request.cookies.set("access_token", apiRes.data.token);
+
         const response = NextResponse.next();
         response.cookies.set("access_token", apiRes.data.token, {
           httpOnly: true,
@@ -73,6 +75,11 @@ export async function middleware(request: NextRequest) {
         });
         return response;
       }
+
+      const loginUrl = new URL("/login", request.url);
+      const response = NextResponse.redirect(loginUrl);
+      response.cookies.delete("refresh_token");
+      return response;
     }
 
     const loginUrl = new URL("/login", request.url);
