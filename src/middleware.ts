@@ -1,6 +1,5 @@
-import { jwtDecrypt, jwtVerify } from "jose";
-
-import { NextResponse, NextRequest } from "next/server";
+import { jwtVerify } from "jose";
+import { NextResponse, type NextRequest } from "next/server";
 
 import * as sdk from "@/backend/sdk.gen";
 
@@ -8,72 +7,61 @@ const tokenSecret = process.env.TOKEN_SECRET!;
 const encodedTokenSecret = new TextEncoder().encode(tokenSecret);
 const tokenAlgorithm = process.env.TOKEN_ALGORITHM!;
 
+async function isTokenValid(token: string | undefined): Promise<boolean> {
+  if (!token) {
+    return false;
+  }
+  try {
+    await jwtVerify(token, encodedTokenSecret, {
+      algorithms: [tokenAlgorithm],
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 export async function middleware(request: NextRequest) {
   const { nextUrl, cookies } = request;
-  const pathname = nextUrl.pathname;
+  const { pathname, search } = nextUrl;
 
   const accessToken = cookies.get("access_token")?.value;
   const refreshToken = cookies.get("refresh_token")?.value;
 
-  if (pathname == "/login") {
-    if (refreshToken !== undefined) {
-      const redirectPath = nextUrl.searchParams.get("redirect");
-      if (redirectPath !== null) {
-        return NextResponse.redirect(new URL(redirectPath, request.url));
-      }
-      return NextResponse.redirect(new URL("/app", request.url));
+  if (pathname === "/login") {
+    if (await isTokenValid(refreshToken)) {
+      const redirectPath = nextUrl.searchParams.get("redirect") ?? "/app";
+      return NextResponse.redirect(new URL(redirectPath, request.url));
     }
     return NextResponse.next();
   }
 
   if (pathname.startsWith("/app")) {
-    let accessTokenValid = accessToken !== undefined;
-    if (accessTokenValid) {
-      try {
-        await jwtVerify(accessToken!, encodedTokenSecret, {
-          algorithms: [tokenAlgorithm],
-        });
-        accessTokenValid = true;
-      } catch (error) {
-        accessTokenValid = false;
-      }
-    }
-
-    if (accessTokenValid) {
+    if (await isTokenValid(accessToken)) {
       return NextResponse.next();
     }
 
-    let refreshTokenValid = refreshToken !== undefined;
-    if (refreshTokenValid) {
+    if (await isTokenValid(refreshToken)) {
       try {
-        await jwtVerify(refreshToken!, encodedTokenSecret, {
-          algorithms: [tokenAlgorithm],
+        const apiRes = await sdk.refreshAccessToken({
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
         });
-        refreshTokenValid = true;
+
+        if (apiRes.data) {
+          const response = NextResponse.next();
+          response.cookies.set("access_token", apiRes.data.token, {
+            httpOnly: true,
+            secure: true,
+            expires: new Date(Date.now() + 1 * 30 * 1000),
+            sameSite: "lax",
+            path: "/",
+          });
+          return response;
+        }
       } catch (error) {
-        refreshTokenValid = false;
-      }
-    }
-
-    if (refreshTokenValid) {
-      const apiRes = await sdk.refreshAccessToken({
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
-
-      if (apiRes.data) {
-        request.cookies.set("access_token", apiRes.data.token);
-
-        const response = NextResponse.next();
-        response.cookies.set("access_token", apiRes.data.token, {
-          httpOnly: true,
-          secure: true,
-          expires: new Date(Date.now() + 1 * 30 * 1000),
-          sameSite: "lax",
-          path: "/",
-        });
-        return response;
+        // Fallthrough to redirect to login if refresh fails
       }
 
       const loginUrl = new URL("/login", request.url);
@@ -83,7 +71,7 @@ export async function middleware(request: NextRequest) {
     }
 
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname + nextUrl.search);
+    loginUrl.searchParams.set("redirect", pathname + search);
     return NextResponse.redirect(loginUrl);
   }
 
